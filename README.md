@@ -1,6 +1,8 @@
 # nwang-EKF-sim
 Python pose-EKF implementation
 
+![nwang-EKF-im](img/sim-pic.png)
+
 ## Intall Dependencies
 Using a new virtual env to install the packages:
 `pip install -r requirements.txt`

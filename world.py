@@ -21,7 +21,7 @@ class World(object):
         self.fpsClock = self.pygame.time.Clock()
         self.main_clock = self.pygame.time.Clock()
         self.window = self.pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
-        self.pygame.display.set_caption("FastSLAM")
+        self.pygame.display.set_caption("nwang-EKF-sim")
         self.setup_world()
 
     def setup_world(self):
