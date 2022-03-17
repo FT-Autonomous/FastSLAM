@@ -57,10 +57,11 @@ class FastSlam(object):
             measured_yaw = self.process_yaw(measured_yaw)
 
             state_vec = [measured_x, measured_y, measured_yaw, measured_vel, measured_gamma]
+            state_vec = self.simulate_failure(state_vec)
             filtered_state = self.ekf.update(state_vec)
 
-            print("Error x : ", abs(filtered_state[0] - self.robot.pos_x))
-            print("Error y : ", abs(filtered_state[1] - self.robot.pos_y))
+            # print("Error x : ", abs(filtered_state[0] - self.robot.pos_x))
+            # print("Error y : ", abs(filtered_state[1] - self.robot.pos_y))
             # print("x, y : ", filtered_state[0], filtered_state[1])
             # print("yaw: ", filtered_state[2])
             print("------------------------")
@@ -86,6 +87,25 @@ class FastSlam(object):
 
     def turn_right(self, angle):
         self.robot.turn_right(angle)
+
+    def simulate_failure(self, state_vector, pose_fr = 0.05, vel_fr = 0.05, pose_mag = 18, vel_mag = 3):
+
+        [measured_x, measured_y, measured_yaw, measured_vel, measured_gamma] = state_vector
+
+        rand1, rand2 = np.random.rand(), np.random.rand()
+
+        if rand1 < pose_fr: 
+            measured_x += np.random.normal(loc=0.0, scale = pose_mag)
+            measured_y += np.random.normal(loc=0.0, scale = pose_mag)
+            print("Pose Fail")
+
+        if rand2 < vel_fr: 
+            measured_vel = abs(np.random.normal(loc=0.0, scale = vel_mag))
+            if measured_vel < 0:
+                measured_vel = 0
+            print("Velocity Fail")
+
+        return [measured_x, measured_y, measured_yaw, measured_vel, measured_gamma]
 
 if __name__=="__main__":
     random.seed(5)
