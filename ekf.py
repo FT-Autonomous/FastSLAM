@@ -48,6 +48,9 @@ class EKF:
         S_k = H@pred_p@np.transpose(H) + self.get_update_noise()
 
         K = pred_p@np.transpose(H)@np.linalg.pinv(S_k)
+        if K[0][0] > 1 or K[1][1] > 1 or K[2][2] > 1:
+            print("K Wrong")
+            print(K)
 
         update_state = pred_state + K@y_k
         update_p = (np.identity(3) - K@H)@pred_p
@@ -63,7 +66,7 @@ class EKF:
         v_noise2 = np.random.normal(loc=0.0, scale=self.noise['velocity'])
         steer_noise = np.random.normal(loc=0.0, scale=self.noise['steer'])
 
-        vec = [v_noise1, v_noise2, steer_noise] #porcess noise
+        vec = [abs(v_noise1), abs(v_noise2), abs(steer_noise)] #porcess noise
 
         return np.array(vec)
 
